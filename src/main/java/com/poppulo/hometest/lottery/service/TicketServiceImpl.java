@@ -1,54 +1,51 @@
 package com.poppulo.hometest.lottery.service;
 
+import com.poppulo.hometest.lottery.dao.LotteryDaoApi;
 import com.poppulo.hometest.lottery.dto.TicketDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TicketServiceImpl implements TicketService{
+    @Autowired
+    private LotteryDaoApi lotteryDaoApi;
 
-//    @Autowired
-//    private TicketNumberRepository ticketNumberRepository;
+    Logger logger = LoggerFactory.getLogger(TicketServiceImpl.class);
 
     @Override
-    public String createTicket() {
-//        Ticket ticket = new Ticket();
-//        List<TicketNumber> numbers = new ArrayList<>();
-//        TicketNumber ticketNumber = new TicketNumber();
-//        ticketNumber.setTicket(ticket);
-//        ticketNumber.setNumber(2);
-//
-//        numbers.add(ticketNumber);
-//        ticket.setNumbers(numbers);
-//
-//        ticketNumberRepository.save(ticket);
-
-        return "created ticket from Service";
+    public TicketDto createTicket(final int line) {
+        logger.info(" line count is : {}",line);
+        return lotteryDaoApi.createLines(line);
     }
 
     @Override
-    public String updateTicket() {
-        return "updated ticket from Service";
+    public TicketDto updateTicket(final String id, final int line) {
+        return lotteryDaoApi.addLinesToTicketById(id, line);
     }
 
     @Override
-    public List<TicketDto> getTickets() {
-//        List<Ticket> tickets = ticketNumberRepository.findAll();
-//        List<TicketDto> resultList = tickets.stream().map(TicketMapper::toDto).collect(Collectors.toList());
-        return new ArrayList<>();
+    public Collection<TicketDto> getTickets() {
+        return lotteryDaoApi.getTickets();
     }
 
     @Override
-    public String getTicketById() {
-        return "get ticket by Id from Service";
+    public TicketDto getTicketById(final String id) {
+        logger.info("Ticket id : {}",id);
+        return lotteryDaoApi.getTicketById(id);
     }
 
     @Override
-    public String getTicketStatusById() {
-        return "get status of ticket from Service";
+    public TicketDto getTicketStatusById(final String id) {
+        TicketDto ticketDto = lotteryDaoApi.getTicketById(id);
+        if(!ticketDto.isLocked()){
+            lotteryDaoApi.lockTicketById(id);
+        }
+        return ticketDto;
     }
 }
