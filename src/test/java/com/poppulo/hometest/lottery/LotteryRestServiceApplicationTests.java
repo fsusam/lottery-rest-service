@@ -3,10 +3,10 @@ package com.poppulo.hometest.lottery;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class LotteryRestServiceApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
