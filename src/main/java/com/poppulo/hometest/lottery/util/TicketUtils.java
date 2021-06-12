@@ -12,11 +12,15 @@ public final class TicketUtils {
 
     public static List<TicketLine> generateLines(final int line) {
         List<TicketLine> lines = new ArrayList<>();
+
         for(int i =0; i<line; i++){
             int[] numbers = getRandomNumbers();
             int result = getLineResult(numbers);
             lines.add(new TicketLine(numbers,result));
         }
+
+        lines.sort(Comparator.comparing(item -> item.getResult()));
+
         return lines;
     }
 
@@ -26,10 +30,12 @@ public final class TicketUtils {
 
     private static int[] getRandomNumbers(){
         Random rand = new Random();
+
         int[] numbers = new int[LINE_NUMBER_SIZE];
+
         for (int i=0; i<LINE_NUMBER_SIZE; i++)
             numbers[i] = rand.nextInt(UPPER_BOUND_RANDOM_VALUE);
-        Arrays.sort(numbers);
+
         return numbers;
     }
 
@@ -45,11 +51,4 @@ public final class TicketUtils {
         else
             return 0;
     }
-    /*public static void main(String[] args) {
-        List<int[]> result = generateLines(10);
-
-        result.forEach(numbers -> {
-            System.out.println(Arrays.toString(numbers));
-        });
-    }*/
 }

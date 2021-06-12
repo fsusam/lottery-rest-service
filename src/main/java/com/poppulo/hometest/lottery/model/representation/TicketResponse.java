@@ -16,7 +16,8 @@ public class TicketResponse extends RepresentationModel<TicketResponse> {
         this.ticketDto = ticketDto;
         add(linkTo(methodOn(TicketController.class).getTicketById(this.ticketDto.getTicketId())).withSelfRel());
         add(linkTo(TicketController.class).withRel("tickets"));
-        add(linkTo(methodOn(TicketController.class).updateTicketById(this.ticketDto.getTicketId(),1)).withRel("addNewLine"));
+        add(linkTo(methodOn(TicketController.class).addLinesToTicketById(this.ticketDto.getTicketId(),1)).withRel("addNewLine"));
+        add(linkTo(methodOn(TicketController.class).getStatusById(this.ticketDto.getTicketId())).withRel("status"));
     }
 
     public TicketDto getTicketDto() {

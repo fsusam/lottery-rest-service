@@ -1,8 +1,6 @@
 package com.poppulo.hometest.lottery.controller;
 
 import com.poppulo.hometest.lottery.converter.RepresentationConverterApi;
-import com.poppulo.hometest.lottery.dto.TicketDto;
-import com.poppulo.hometest.lottery.model.representation.TicketResponse;
 import com.poppulo.hometest.lottery.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +51,9 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity<RepresentationModel> updateTicketById(@PathVariable String id,@RequestParam(required = false) Integer line) {
+    public HttpEntity<RepresentationModel> addLinesToTicketById(@PathVariable String id,@RequestParam(required = false) Integer line) {
         RepresentationModel result =representationConverterApi.toConvert(
-                ticketService.updateTicket(id,Optional.ofNullable(line).orElse(1))
+                ticketService.addLinesToTicketById(id,Optional.ofNullable(line).orElse(1))
         );
 
         return new ResponseEntity<>(result, HttpStatus.OK);

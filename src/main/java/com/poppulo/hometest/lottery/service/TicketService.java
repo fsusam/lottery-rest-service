@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TicketService {
     public TicketDto createTicket(final int line);
-    public TicketDto updateTicket(final String id, final int line);
+    public TicketDto addLinesToTicketById(final String id, final int line);
     public Collection<TicketDto> getTickets();
     public TicketDto getTicketById(final String id);
     public TicketDto getTicketStatusById(final String id);

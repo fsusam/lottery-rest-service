@@ -2,14 +2,14 @@ package com.poppulo.hometest.lottery.service;
 
 import com.poppulo.hometest.lottery.dao.LotteryDaoApi;
 import com.poppulo.hometest.lottery.dto.TicketDto;
+import com.poppulo.hometest.lottery.exception.LockedTicketException;
+import com.poppulo.hometest.lottery.util.TicketUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class TicketServiceImpl implements TicketService{
@@ -20,13 +20,24 @@ public class TicketServiceImpl implements TicketService{
 
     @Override
     public TicketDto createTicket(final int line) {
-        logger.info(" line count is : {}",line);
-        return lotteryDaoApi.createLines(line);
+        logger.info("Input line : {}",line);
+        TicketDto ticketDto =new TicketDto(TicketUtils.generateTicketId(),TicketUtils.generateLines(line));
+        logger.info("Created ticket : {}",ticketDto);
+        lotteryDaoApi.saveOrUpdate(ticketDto);
+        return ticketDto;
     }
 
     @Override
-    public TicketDto updateTicket(final String id, final int line) {
-        return lotteryDaoApi.addLinesToTicketById(id, line);
+    public TicketDto addLinesToTicketById(final String id, final int line) {
+        TicketDto ticketDto = lotteryDaoApi.getTicketById(id);
+
+        if(ticketDto.isLocked())
+            throw new LockedTicketException("The ticket has been locked.");
+
+        ticketDto.getLines().addAll(TicketUtils.generateLines(line));
+        lotteryDaoApi.saveOrUpdate(ticketDto);
+
+        return ticketDto;
     }
 
     @Override
@@ -36,7 +47,6 @@ public class TicketServiceImpl implements TicketService{
 
     @Override
     public TicketDto getTicketById(final String id) {
-        logger.info("Ticket id : {}",id);
         return lotteryDaoApi.getTicketById(id);
     }
 
@@ -44,7 +54,8 @@ public class TicketServiceImpl implements TicketService{
     public TicketDto getTicketStatusById(final String id) {
         TicketDto ticketDto = lotteryDaoApi.getTicketById(id);
         if(!ticketDto.isLocked()){
-            lotteryDaoApi.lockTicketById(id);
+            ticketDto.setLocked(Boolean.TRUE);
+            lotteryDaoApi.saveOrUpdate(ticketDto);
         }
         return ticketDto;
     }
