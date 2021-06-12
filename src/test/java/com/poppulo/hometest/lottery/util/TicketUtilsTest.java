@@ -54,14 +54,15 @@ class TicketUtilsTest {
         //logger.info("Random number : {}", randomNumberGenerator.generateNumber(3));
         int[] expected = new int[] {0,1,1};
 
-        MockedStatic<RandomNumberGenerator> randomNumberGeneratorMockedStatic =  Mockito.mockStatic(RandomNumberGenerator.class);
-        randomNumberGeneratorMockedStatic.when(() -> RandomNumberGenerator.generateNumber(UPPER_BOUND_RANDOM_VALUE,LINE_NUMBER_SIZE))
-                .thenReturn(expected);
+        try(MockedStatic<RandomNumberGenerator> randomNumberGeneratorMockedStatic =  Mockito.mockStatic(RandomNumberGenerator.class)){
+            randomNumberGeneratorMockedStatic.when(() -> RandomNumberGenerator.generateNumber(UPPER_BOUND_RANDOM_VALUE,LINE_NUMBER_SIZE))
+                    .thenReturn(expected);
 
-        List<TicketLine> ticketLines = TicketUtils.generateLines(1);
-        assertNotNull(ticketLines);
-        assertTrue(Arrays.stream(ticketLines.get(0).getNumbers()).sum()==2);
-        assertTrue(ticketLines.get(0).getResult()==10);
+            List<TicketLine> ticketLines = TicketUtils.generateLines(1);
+            assertNotNull(ticketLines);
+            assertTrue(Arrays.stream(ticketLines.get(0).getNumbers()).sum()==2);
+            assertTrue(ticketLines.get(0).getResult()==10);
+        }
     }
 
     @Test

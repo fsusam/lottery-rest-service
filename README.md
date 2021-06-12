@@ -1,6 +1,15 @@
 # lottery-rest-service
 Poppulo interview home project
 
+# Build project
+mvn clean install
+
+# Run project using Docker
+### Run service
+docker-compose -f docker-compose.yml up -d --build
+### Stop service
+docker-compose -f docker-compose.yml rm -s -v --force
+
 # API doc with swagger
 http://localhost:8080/swagger-ui/#/ticket-controller
 

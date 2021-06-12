@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  ticket:
+    build: .
+    container_name: ticket-service
+    hostname: ticket-service
+    ports:
+        - 8080:8080
