@@ -4,17 +4,18 @@ import com.poppulo.hometest.lottery.dto.TicketLine;
 
 import java.util.*;
 
-public final class TicketUtils {
+public class TicketUtils {
     private static final int UPPER_BOUND_RANDOM_VALUE = 3;
     private static final int LINE_NUMBER_SIZE = 3;
 
-    private TicketUtils(){}
+    TicketUtils(){}
 
     public static List<TicketLine> generateLines(final int line) {
         List<TicketLine> lines = new ArrayList<>();
 
         for(int i =0; i<line; i++){
-            int[] numbers = getRandomNumbers();
+            Random rand = new Random();
+            int[] numbers = RandomNumberGenerator.generateNumber(UPPER_BOUND_RANDOM_VALUE,LINE_NUMBER_SIZE);
             int result = getLineResult(numbers);
             lines.add(new TicketLine(numbers,result));
         }
@@ -26,17 +27,6 @@ public final class TicketUtils {
 
     public static String generateTicketId(){
         return UUID.randomUUID().toString();
-    }
-
-    private static int[] getRandomNumbers(){
-        Random rand = new Random();
-
-        int[] numbers = new int[LINE_NUMBER_SIZE];
-
-        for (int i=0; i<LINE_NUMBER_SIZE; i++)
-            numbers[i] = rand.nextInt(UPPER_BOUND_RANDOM_VALUE);
-
-        return numbers;
     }
 
     private static int getLineResult(int[] numbers){
@@ -51,4 +41,5 @@ public final class TicketUtils {
         else
             return 0;
     }
+
 }
